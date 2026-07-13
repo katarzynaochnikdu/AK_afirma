@@ -8,6 +8,21 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div id="loginOverlay" class="login-overlay">
+      <form id="loginForm" class="login-card">
+        <h2>Logowanie</h2>
+        <p class="login-sub">Dostęp do podglądu demo</p>
+        <label>Login
+          <input id="loginUser" type="text" autocomplete="username" autofocus />
+        </label>
+        <label>Hasło
+          <input id="loginPass" type="password" autocomplete="current-password" />
+        </label>
+        <button type="submit" class="btn login-btn">Zaloguj</button>
+        <p id="loginError" class="login-error" hidden>Błędny login lub hasło.</p>
+      </form>
+    </div>
+
     <div class="demo-banner">
       🔎 <strong>Wersja demonstracyjna</strong> — dane są <strong>przykładowe (fikcyjne)</strong>,
       pokazują jedynie sposób prezentacji. Docelowo zasilane fakturami z afaktury.pl.
@@ -66,5 +81,6 @@
 
     <script src="data.js"></script>
     <script src="app.js"></script>
+    <script src="login.js"></script>
   </body>
 </html>
