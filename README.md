@@ -66,9 +66,12 @@ afaktury.pl API  ──►  klient (src/afaktury)  ──►  warstwa domenowa (
 
 ## Wersja demonstracyjna (GitHub Pages)
 
-W katalogu `docs/` jest **statyczna wersja dashboardu z danymi przykładowymi** — do pokazania klientowi
-jak to wygląda, bez uruchamiania serwera. Dane są fikcyjne i „wkompilowane" w stronę (`docs/data.js`),
-filtrowanie działa po stronie przeglądarki.
+W katalogu `docs/` jest **statyczny „Panel wydawcy" z danymi przykładowymi** — koncept do pokazania
+klientowi, bez uruchamiania serwera. Trzy widoki: **Sprzedaż** (tytuł × miesiąc, rabaty, zwroty),
+**Autorzy** (statystyki per autor i per tytuł, narosłe tantiemy) oraz **Rozliczenia kwartalne**
+(zestawienie tantiem autora za kwartał + symulacja automatycznego e-maila z rozliczeniem).
+Motyw jasny/ciemny przełączany w pasku. Dane są fikcyjne i „wkompilowane" w stronę (`docs/data.js`),
+filtrowanie działa po stronie przeglądarki. Logowanie demo: `artur` / `4321`.
 
 ```bash
 npm run build:demo   # regeneruje docs/data.js z danych mock

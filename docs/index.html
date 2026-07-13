@@ -3,14 +3,24 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sprzedaż pozycji — demo (dane przykładowe)</title>
+    <title>Panel wydawcy — demo (dane przykładowe)</title>
     <meta name="robots" content="noindex" />
+    <script>
+      // Ustaw motyw przed pierwszym malowaniem (bez blysku)
+      (function () {
+        var t = localStorage.getItem("demo-theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      })();
+    </script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="loginOverlay" class="login-overlay">
       <form id="loginForm" class="login-card">
-        <h2>Logowanie</h2>
+        <h2>Panel wydawcy</h2>
         <p class="login-sub">Dostęp do podglądu demo</p>
         <label>Login
           <input id="loginUser" type="text" autocomplete="username" autofocus />
@@ -18,66 +28,94 @@
         <label>Hasło
           <input id="loginPass" type="password" autocomplete="current-password" />
         </label>
-        <button type="submit" class="btn login-btn">Zaloguj</button>
+        <button type="submit" class="btn btn-primary login-btn">Zaloguj</button>
         <p id="loginError" class="login-error" hidden>Błędny login lub hasło.</p>
       </form>
     </div>
 
-    <div class="demo-banner">
-      🔎 <strong>Wersja demonstracyjna</strong> — dane są <strong>przykładowe (fikcyjne)</strong>,
-      pokazują jedynie sposób prezentacji. Docelowo zasilane fakturami z afaktury.pl.
+    <div class="page">
+      <div class="demo-banner">
+        🔎 <strong>Wersja demonstracyjna</strong> — wszystkie dane są <strong>przykładowe (fikcyjne)</strong>.
+        Docelowo zasilane automatycznie fakturami z afaktury.pl.
+      </div>
+
+      <header class="topbar">
+        <div>
+          <h1>Panel wydawcy</h1>
+          <p class="subtitle">Sprzedaż tytułów · statystyki autorów · rozliczenia tantiem</p>
+        </div>
+        <div class="topbar-right">
+          <span class="badge mock">DANE PRZYKŁADOWE</span>
+          <button id="themeToggle" class="btn icon-btn" type="button" aria-label="Przełącz motyw" title="Przełącz motyw jasny/ciemny">
+            <span class="theme-icon-light">☀️</span><span class="theme-icon-dark">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <nav class="tabs" role="tablist">
+        <button class="tab" data-view="sprzedaz" role="tab">Sprzedaż</button>
+        <button class="tab" data-view="autorzy" role="tab">Autorzy</button>
+        <button class="tab" data-view="rozliczenia" role="tab">Rozliczenia kwartalne</button>
+      </nav>
+
+      <!-- ===================== WIDOK: SPRZEDAŻ ===================== -->
+      <section id="view-sprzedaz" class="view" hidden>
+        <div class="filters">
+          <label>Od miesiąca <select id="fromMonth"></select></label>
+          <label>Do miesiąca <select id="toMonth"></select></label>
+          <label>Tytuł <select id="bookFilter"><option value="">— wszystkie —</option></select></label>
+        </div>
+
+        <div class="tiles">
+          <div class="tile"><span class="tile-value" id="tQty">–</span><span class="tile-label">Sprzedane egzemplarze (netto)</span></div>
+          <div class="tile"><span class="tile-value" id="tNetto">–</span><span class="tile-label">Przychód netto po rabatach (zł)</span></div>
+          <div class="tile"><span class="tile-value" id="tRebate">–</span><span class="tile-label">Udzielone rabaty (zł)</span><span class="tile-sub" id="tRebatePct"></span></div>
+          <div class="tile"><span class="tile-value" id="tReturns">–</span><span class="tile-label">Zwroty (egz.)</span></div>
+        </div>
+
+        <div class="card">
+          <h2 id="chartTitle">Sprzedaż w miesiącach</h2>
+          <div id="chartMonthly" class="chart"></div>
+        </div>
+
+        <div class="card">
+          <h2>Tytuł × miesiąc — sprzedane egzemplarze</h2>
+          <div class="table-scroll">
+            <table id="pivot" class="num-table"><thead></thead><tbody></tbody></table>
+          </div>
+          <p id="pivotEmpty" class="empty" hidden>Brak danych dla wybranego zakresu.</p>
+        </div>
+      </section>
+
+      <!-- ===================== WIDOK: AUTORZY ===================== -->
+      <section id="view-autorzy" class="view" hidden>
+        <div class="card">
+          <h2>Przychód netto wg autora (cały okres)</h2>
+          <div id="chartAuthors" class="chart"></div>
+        </div>
+        <div id="authorCards" class="author-grid"></div>
+      </section>
+
+      <!-- ===================== WIDOK: ROZLICZENIA ===================== -->
+      <section id="view-rozliczenia" class="view" hidden>
+        <div class="filters">
+          <label>Kwartał <select id="qSelect"></select></label>
+          <label>Autor <select id="aSelect"></select></label>
+        </div>
+
+        <div class="card settlement" id="settlementCard"></div>
+
+        <div class="mail-actions">
+          <button id="mailBtn" class="btn btn-primary" type="button">✉️ Pokaż symulację e-maila do autora</button>
+        </div>
+
+        <div id="mailPreview" class="mail-window" hidden></div>
+      </section>
+
+      <footer class="foot"><span id="status"></span></footer>
     </div>
 
-    <header class="topbar">
-      <div>
-        <h1>Sprzedaż pozycji</h1>
-        <p class="subtitle">Ile sztuk każdego tytułu sprzedano w danym miesiącu · przykład dla wydawnictwa</p>
-      </div>
-      <div class="topbar-right">
-        <span id="sourceBadge" class="badge mock">DANE PRZYKŁADOWE</span>
-      </div>
-    </header>
-
-    <section class="filters">
-      <label>Od miesiąca
-        <select id="fromMonth"></select>
-      </label>
-      <label>Do miesiąca
-        <select id="toMonth"></select>
-      </label>
-      <label>Pozycja
-        <select id="product">
-          <option value="">— wszystkie —</option>
-        </select>
-      </label>
-    </section>
-
-    <section class="tiles">
-      <div class="tile"><span class="tile-value" id="tileQty">–</span><span class="tile-label">Sprzedane sztuki (netto)</span></div>
-      <div class="tile"><span class="tile-value" id="tileTitles">–</span><span class="tile-label">Tytuły</span></div>
-      <div class="tile"><span class="tile-value" id="tileMonths">–</span><span class="tile-label">Miesiące</span></div>
-      <div class="tile"><span class="tile-value" id="tileNetto">–</span><span class="tile-label">Wartość netto (zł)</span></div>
-    </section>
-
-    <section class="card">
-      <h2 id="chartTitle">Sprzedaż w miesiącach</h2>
-      <div id="chart" class="chart"></div>
-    </section>
-
-    <section class="card">
-      <h2>Tabela: pozycja × miesiąc (liczba sztuk)</h2>
-      <div class="table-scroll">
-        <table id="pivot">
-          <thead></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <p id="empty" class="empty" hidden>Brak danych dla wybranego zakresu.</p>
-    </section>
-
-    <footer class="foot">
-      <span id="status"></span>
-    </footer>
+    <div id="tooltip" class="tooltip" hidden></div>
 
     <script src="data.js"></script>
     <script src="app.js"></script>
