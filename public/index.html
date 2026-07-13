@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sprzedaż pozycji — dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <h1>Sprzedaż pozycji</h1>
+        <p class="subtitle">Ile sztuk każdego tytułu sprzedano w danym miesiącu · źródło: afaktury.pl</p>
+      </div>
+      <div class="topbar-right">
+        <span id="sourceBadge" class="badge">…</span>
+        <button id="syncBtn" class="btn">Odśwież dane</button>
+      </div>
+    </header>
+
+    <section class="filters">
+      <label>Od miesiąca
+        <select id="fromMonth"></select>
+      </label>
+      <label>Do miesiąca
+        <select id="toMonth"></select>
+      </label>
+      <label>Pozycja
+        <select id="product">
+          <option value="">— wszystkie —</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="tiles">
+      <div class="tile"><span class="tile-value" id="tileQty">–</span><span class="tile-label">Sprzedane sztuki (netto)</span></div>
+      <div class="tile"><span class="tile-value" id="tileTitles">–</span><span class="tile-label">Tytuły</span></div>
+      <div class="tile"><span class="tile-value" id="tileMonths">–</span><span class="tile-label">Miesiące</span></div>
+      <div class="tile"><span class="tile-value" id="tileNetto">–</span><span class="tile-label">Wartość netto (zł)</span></div>
+    </section>
+
+    <section class="card">
+      <h2 id="chartTitle">Sprzedaż w miesiącach</h2>
+      <div id="chart" class="chart"></div>
+    </section>
+
+    <section class="card">
+      <h2>Tabela: pozycja × miesiąc (liczba sztuk)</h2>
+      <div class="table-scroll">
+        <table id="pivot">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p id="empty" class="empty" hidden>Brak danych dla wybranego zakresu.</p>
+    </section>
+
+    <footer class="foot">
+      <span id="status"></span>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>

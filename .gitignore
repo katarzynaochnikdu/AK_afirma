@@ -1,0 +1,25 @@
+# Sekrety — NIGDY do repo
+.env
+.env.local
+
+# Zaleznosci i build
+node_modules/
+dist/
+
+# Lokalna baza danych (cache sprzedazy)
+data/
+*.sqlite
+*.sqlite-journal
+*.db
+
+# Logi / smieci systemowe
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Lokalne instrukcje/dokumenty (moga zawierac dane konta) — nie do repo publicznego
+Instrukcja*.docx
+Instrukcja*.pdf
+*.docx
+*.pdf
