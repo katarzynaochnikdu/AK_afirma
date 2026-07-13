@@ -94,7 +94,14 @@ h2 { margin: 0 0 14px; font-size: 15px; font-weight: 650; }
 .btn:hover { border-color: var(--accent); color: var(--accent-ink); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 .btn-primary:hover { opacity: 0.92; color: #fff; }
-.icon-btn { padding: 7px 10px; font-size: 15px; line-height: 1; }
+.icon-btn {
+  padding: 7px 12px; line-height: 1;
+  display: inline-flex; align-items: center; gap: 7px;
+  color: var(--text-2);
+}
+.icon-btn:hover { color: var(--accent-ink); }
+.icon-btn svg { display: block; flex-shrink: 0; }
+.theme-label { font-size: 12.5px; font-weight: 550; }
 
 /* ============ Zakladki ============ */
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--grid); margin-bottom: 20px; }
